@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Painel Administrativo">
+  <div class="dashboard-container">
+    
+    <header class="dash-header">
+      <h1>Olá, Administrador.</h1>
+      <p>O que você deseja fazer hoje?</p>
+    </header>
+
+    <div class="grid-actions">
+      <a href="/admin/" target="_blank" class="card action-card">
+        <div class="icon">✏️</div>
+        <h3>Gerenciar Posts</h3>
+        <p>Criar, editar ou excluir publicações do blog via Decap CMS.</p>
+        <span class="btn-fake">Abrir Editor &rarr;</span>
+      </a>
+
+      <a href="/" class="card">
+        <div class="icon">🏠</div>
+        <h3>Ver Site Online</h3>
+        <p>Visualize como o blog está ficando para os leitores.</p>
+      </a>
+
+      <a href="https://decapcms.org/docs" target="_blank" class="card">
+        <div class="icon">📚</div>
+        <h3>Documentação Decap</h3>
+        <p>Precisa de ajuda com o uso do painel?</p>
+      </a>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .dashboard-container {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+  }
+
+  .dash-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+  }
+  
+  .dash-header h1 { font-size: 2.5rem; color: #333; }
+  .dash-header p { color: #666; font-size: 1.1rem; }
+
+  .grid-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: #333;
+  }
+
+  .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  
+  .card h3 { margin-bottom: 0.5rem; color: #222; }
+  .card p { color: #666; font-size: 0.9rem; flex-grow: 1; }
+
+  .btn-fake {
+    margin-top: 1.5rem;
+    color: #0056b3;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  
+  .action-card {
+    background: #fdfdfd;
+    border: 2px solid #333;
+  }
+</style>
