@@ -1,0 +1,24 @@
+backend:
+  name: git-gateway # Usa o Git para salvar
+  branch: main # A branch principal do seu GitHub (pode ser 'master' em repos antigos)
+
+# Onde as imagens dos posts serão salvas
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+# Configuração regional
+locale: "pt"
+
+collections:
+  - name: "blog" # Nome interno
+    label: "Blog" # Nome que aparece no menu
+    folder: "src/content/blog" # Onde o Astro lê os arquivos .md
+    create: true # Permite criar novos posts
+    slug: "{{slug}}" # O nome do arquivo será o slug (ex: meu-post.md)
+    fields:
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Data de Publicação", name: "pubDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false}
+      - {label: "Descrição Curta", name: "description", widget: "text"}
+      - {label: "Autor", name: "author", widget: "string", default: "Admin"}
+      - {label: "Imagem de Capa", name: "coverImage", widget: "image", required: false}
+      - {label: "Conteúdo", name: "body", widget: "markdown"}

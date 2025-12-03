@@ -1,0 +1,108 @@
+---
+// src/layouts/BaseLayout.astro
+// Aqui no topo (entre os ---) fica o JavaScript do servidor, se precisar.
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Descrição do meu blog incrível" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+	</head>
+	<body>
+        <header class="site-header">
+			<nav>
+                <a href="/" class="logo">Meu Blog</a>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/sobre">Sobre</a></li>
+                    <li><a href="/painel">🔒 Área Admin</a></li>
+                </ul>
+            </nav>
+		</header>
+
+        <main class="container">
+			<slot /> 
+		</main>
+
+        <footer class="site-footer">
+            <p>© 2023 Meu Blog. Feito com Astro.</p>
+        </footer>
+	</body>
+</html>
+
+<style is:global>
+    /* Reset básico */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f4f4f9;
+    }
+    a { color: #0056b3; text-decoration: none; }
+    img { max-width: 100%; height: auto; } /* Imagens responsivas */
+
+    /* Estrutura */
+    .container {
+        max-width: 800px; /* Largura máxima no PC */
+        margin: 2rem auto; /* Centraliza na tela */
+        padding: 0 1rem; /* Espacinho nas laterais no celular */
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Cabeçalho e Rodapé */
+    .site-header, .site-footer {
+        background: #333;
+        color: white;
+        padding: 1rem 0;
+        text-align: center;
+    }
+    .site-header nav {
+        max-width: 800px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+    }
+    .site-header ul { display: flex; gap: 1rem; list-style: none;}
+    .site-header a { color: white; }
+
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>© 2023 Meu Blog. Todos os direitos reservados.</p>
+            
+            <a href="/keystatic" class="admin-link" aria-label="Acesso Administrativo">
+                🔒 Área Admin
+            </a>
+        </div>
+    </footer>
+
+    /* Estilo discreto para o botão admin */
+    .admin-link {
+        font-size: 0.8rem;
+        color: #999;
+        text-decoration: none;
+        margin-left: 10px;
+        border: 1px solid #ddd;
+        padding: 2px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    .admin-link:hover {
+        background-color: #eee;
+        color: #333;
+    }
+</style>

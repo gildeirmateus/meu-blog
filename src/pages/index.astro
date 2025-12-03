@@ -1,11 +1,41 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Busca todos os posts da coleção 'blog'
+const allPosts = await getCollection('blog');
+
+// Ordena os posts por data (mais recente primeiro)
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Página Inicial do Meu Blog">
+	<h1>Últimas Postagens</h1>
+    <p>Bem-vindo ao meu espaço digital.</p>
+
+	<ul class="post-list">
+        {sortedPosts.map((post) => (
+			<li>
+                <a href={`/blog/${post.slug}/`}>
+                    <h2>{post.data.title}</h2>
+                </a>
+                <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('pt-BR')}
+                </time>
+                <p>{post.data.description}</p>
+            </li>
+		))}
+	</ul>
+</BaseLayout>
+
+<style>
+    .post-list { list-style: none; padding: 0; }
+    .post-list li {
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+    }
+    .post-list h2 { margin-bottom: 0.5rem; }
+    time { color: #666; font-size: 0.9rem; }
+</style>

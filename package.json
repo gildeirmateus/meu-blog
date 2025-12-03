@@ -3,12 +3,16 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "npx decap-server & astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.3"
+    "@astrojs/markdoc": "^0.15.9",
+    "@astrojs/react": "^4.4.2",
+    "astro": "^5.16.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }
