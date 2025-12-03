@@ -36,23 +36,28 @@ const { title } = Astro.props;
         <footer class="site-footer">
             <p>© 2023 Meu Blog. Feito com Astro.</p>
         </footer>
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
         <script>
-            // Este script garante que, se o widget for carregado com um token (como o de reset),
-            // ele processa o token antes de qualquer outra coisa.
-            if (window.netlifyIdentity) {
-              window.netlifyIdentity.on('init', function (user) {
-                if (user) {
-                  // Se o usuário logar/confirmar, redirecionamos ele para a área administrativa
-                  // Isso evita que ele fique preso na página inicial
-                  if (window.location.hash.includes('invite') || 
-                      window.location.hash.includes('recovery') || 
-                      window.location.pathname === '/') {
-                    window.location.href = '/admin/';
-                  }
-                }
-              });
+        if (window.netlifyIdentity) {
+            // 1. Verifica se há um token na URL (o #recovery= é um token)
+            const isTokenPresent = window.location.hash.includes('token=') ||
+                                window.location.hash.includes('recovery=') ||
+                                window.location.hash.includes('invite=');
+
+            // 2. Se houver um token, abre o widget forçadamente para processar o link.
+            if (isTokenPresent) {
+            window.netlifyIdentity.open();
             }
-          </script>
+
+            // 3. Se o login for bem-sucedido (após reset), redireciona para o admin
+            window.netlifyIdentity.on('login', () => {
+                if (window.location.pathname !== '/admin/') {
+                    window.location.href = '/admin/';
+                }
+            });
+        }
+        </script>
 	</body>
 </html>
 
