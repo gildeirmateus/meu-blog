@@ -1,4 +1,3 @@
-
 ---
 // src/layouts/BaseLayout.astro
 interface Props {
@@ -12,34 +11,53 @@ const { title } = Astro.props;
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Descrição do meu blog incrível" />
+    <meta name="description" content="Consultoria Ambiental especializada em MG e SP" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
+    <title>{title} | Sementaria Ambiental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   </head>
   <body>
     <header class="site-header">
       <nav>
-        <a href="/" class="logo">Sementaria Ambiental</a>
-        <ul>
-          <li><a href="/">Página Inicial</a></li>
+        <a href="/" class="logo-link" aria-label="Sementaria Ambiental Home">
+          <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <path d="M50 90 C 50 90, 30 80, 30 50 C 30 20, 50 10, 50 10 C 50 10, 70 20, 70 50 C 70 65, 60 75, 55 78" stroke="white" stroke-width="2" fill="none"/>
+             <circle cx="50" cy="35" r="15" fill="white" fill-opacity="0.2"/>
+             <path d="M50 50 L40 30 M50 50 L60 35 M50 50 L50 25 M45 60 L35 45 M55 60 L65 40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+             <path d="M70 50 C 75 50, 85 55, 85 70 C 85 85, 75 90, 70 92" stroke="white" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+             <text x="10" y="98" fill="white" font-size="10px">Sementaria</text>
+          </svg>
+          <span class="logo-text">Sementaria Ambiental</span>
+        </a>
+        <ul class="top-nav">
+          <li><a href="/">Início</a></li>
           <li><a href="/sobre">Sobre</a></li>
-          <li><a href="/admin">🍃</a></li> 
+          <li><a href="/admin" class="admin-icon">🍃</a></li> 
         </ul>
       </nav>
     </header>
 
-    <main class="container">
-      <slot /> 
-    </main>
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <h3>Atuação Regional</h3>
+            <nav class="state-nav">
+                <ul>
+                    <li><a href="/mg">🌲 Minas Gerais</a></li>
+                    <li><a href="/sp">🏙️ São Paulo</a></li>
+                    <li><a href="/blog">📰 Blog Recentes</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <slot /> 
+        </main>
+    </div>
 
     <footer class="site-footer">
       <div class="footer-content">
-        <p>© 2023 Meu Blog. Feito com Astro.</p>
-        
-        <a href="/keystatic" class="admin-link" aria-label="Acesso Administrativo">
-          🔒 Área Admin
-        </a>
+        <p>© 2025 Sementaria Ambiental. Consultoria especializada.</p>
       </div>
     </footer>
 
@@ -55,7 +73,6 @@ const { title } = Astro.props;
           }
         });
 
-        // Lógica de recuperação de senha e redirecionamento
         const isTokenPresent = window.location.hash.includes('token=') ||
                                window.location.hash.includes('recovery=') ||
                                window.location.hash.includes('invite=');
@@ -69,76 +86,180 @@ const { title } = Astro.props;
 </html>
 
 <style is:global>
+  /* --- Variáveis de Cor do Tema (Paleta Capuchino/Natureza) --- */
+  :root {
+    --color-bg-main: #8D7E71; /* Cor Capuchino sólida para fundo */
+    --color-text-dark: #3E2723; /* Marrom escuro para texto */
+    --color-text-light: #EFEBE9; /* Cor clara para texto em fundos escuros */
+    --color-header-bg: #4E342E; /* Marrom café forte para cabeçalho */
+    --color-content-bg: #FAF8F7; /* Creme quase branco para áreas de leitura */
+    --color-sidebar-bg: #D7CCC8; /* Bege claro para sidebar */
+    --color-accent-green: #33691E; /* Verde floresta para destaques e links */
+    --font-heading: 'Merriweather', serif;
+    --font-body: 'Open Sans', sans-serif;
+  }
+
   /* Reset básico */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
-    font-family: system-ui, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f9;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    color: var(--color-text-dark);
+    
+    /* --- CONFIGURAÇÃO DO FUNDO --- */
+    background-color: var(--color-bg-main); /* Cor sólida de fallback */
+    
+    /* IMPORTANTE: Substitua a URL abaixo pela sua imagem de textura de folha */
+    background-image: url('/textura-folha.jpg');
+    background-repeat: repeat;
+    background-blend-mode: multiply; /* Ajuda a misturar a textura com a cor de fundo */
+    
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
-  a { color: #0056b3; text-decoration: none; }
-  img { max-width: 100%; height: auto; }
-
-  /* Estrutura */
-  .container {
-    width: 100%;
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex: 1; /* Faz o main empurrar o footer para baixo */
+  a { 
+      color: var(--color-accent-green);
+      text-decoration: none; 
+      transition: color 0.2s;
   }
-
-  /* Cabeçalho e Rodapé */
-  .site-header, .site-footer {
-    background: #333;
-    color: white;
+  a:hover {
+      color: var(--color-header-bg);
+      text-decoration: underline;
+  }
+  img { max-width: 100%; height: auto; display: block; }
+  h1, h2, h3 { font-family: var(--font-heading); color: var(--color-header-bg); }
+ 
+  /* --- Cabeçalho --- */
+  .site-header {
+    background: var(--color-header-bg);
+    color: var(--color-text-light);
     padding: 1rem 0;
-    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 
   .site-header nav {
-    max-width: 800px;
+    max-width: 1200px; /* Largura máxima maior para telas grandes */
     margin: auto;
     display: flex;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     align-items: center;
   }
 
-  .site-header ul { display: flex; gap: 1rem; list-style: none;}
-  .site-header a { color: white; }
+  /* Estilos da Logo */
+  .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none !important;
+  }
+  .logo-svg {
+      width: 50px;
+      height: 50px;
+      /* O SVG já está configurado como branco internamente */
+  }
+  .logo-text {
+      font-family: var(--font-heading);
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: var(--color-text-light);
+      display: none; /* Esconde texto em mobile muito pequeno, mostra depois */
+  }
+  @media (min-width: 480px) { .logo-text { display: block; } }
 
-  .footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+
+  .site-header ul.top-nav { 
+      display: flex; 
+      gap: 1.5rem; 
+      list-style: none;
+  }
+  .site-header ul.top-nav a { 
+      color: var(--color-text-light);
+      font-weight: 600;
+  }
+  .admin-icon { font-size: 1.2rem; }
+
+  /* --- Layout Principal (Wrapper) --- */
+  .main-wrapper {
+      flex: 1; /* Empurra o rodapé */
+      width: 100%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      
+      /* Layout padrão (Mobile): Empilhado */
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
   }
 
-  /* Estilo do botão admin */
-  .admin-link {
-    font-size: 0.8rem;
-    color: #999;
-    text-decoration: none;
-    border: 1px solid #555;
-    padding: 4px 10px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    background: rgba(255,255,255,0.05);
+  /* --- Sidebar (Menu Lateral) --- */
+  .sidebar {
+      background: var(--color-sidebar-bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--color-accent-green);
   }
+  .sidebar h3 { margin-bottom: 1rem; color: var(--color-header-bg); }
+  .state-nav ul { list-style: none; }
+  .state-nav li { margin-bottom: 0.8rem; }
+  .state-nav a {
+      display: block;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: 4px;
+      color: var(--color-header-bg);
+      font-weight: 600;
+  }
+  .state-nav a:hover {
+      background: var(--color-accent-green);
+      color: white;
+      text-decoration: none;
+  }
+
+  /* --- Área de Conteúdo --- */
+  .content-area {
+    background: var(--color-content-bg);
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--color-header-bg);
+  }
+
+  /* --- Rodapé --- */
+  .site-footer {
+    background: var(--color-header-bg);
+    color: rgba(255,255,255,0.7);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: auto;
+  }
+
+  /* =========================================
+     MEDIA QUERIES (Responsividade)
+     ========================================= */
   
-  .admin-link:hover {
-    background-color: #eee;
-    color: #333;
-    border-color: #eee;
+  /* Layout para Tablets e Desktops (acima de 768px) */
+  @media (min-width: 768px) {
+      .main-wrapper {
+          /* Muda para CSS Grid */
+          display: grid;
+          /* Define as colunas: Sidebar fixa (260px) e Conteúdo flexível (1fr) */
+          grid-template-columns: 260px 1fr;
+          gap: 3rem;
+          align-items: start; /* Alinha os itens ao topo */
+      }
+
+      .sidebar {
+          /* Opcional: Torna a sidebar fixa ao rolar a página em telas grandes */
+          position: sticky;
+          top: 2rem;
+      }
+      
+      .logo-svg { width: 60px; height: 60px; }
+      .logo-text { font-size: 1.5rem; }
   }
 </style>
