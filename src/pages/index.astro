@@ -8,34 +8,124 @@ const allPosts = await getCollection('blog');
 
 // Ordena os posts por data (mais recente primeiro)
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
 ---
 
-<BaseLayout title="Página Inicial do Meu Blog">
-	<h1>Últimas Postagens</h1>
-    <p>Bem-vindo ao meu espaço digital.</p>
+<BaseLayout title={pageTitle}>
 
-	<ul class="post-list">
+    <section class="blog-intro">
+        <h1>Cultivando Soluções Ambientais</h1>
+        <p>
+            A <strong>Sementaria Ambiental</strong> é uma iniciativa dedicada à consultoria e inteligência ambiental com foco nos estados de <strong>Minas Gerais</strong> e <strong>São Paulo</strong>.
+        </p>
+        <p>
+            Nosso objetivo é descomplicar a legislação e promover práticas sustentáveis. Aqui você encontrará artigos técnicos, atualizações sobre licenciamento e estudos de caso para auxiliar gestores, empresas e produtores rurais na tomada de decisões assertivas.
+        </p>
+    </section>
+
+    <div class="feed-header">
+        <h2>📅 Últimas Atualizações</h2>
+        <hr />
+    </div>
+
+    <ul class="post-list">
         {sortedPosts.map((post) => (
-			<li>
-                <a href={`/blog/${post.slug}/`}>
-                    <h2>{post.data.title}</h2>
+            <li class="post-card">
+                <a href={`/blog/${post.slug}/`} class="post-link">
+                    <h3>{post.data.title}</h3>
                 </a>
-                <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('pt-BR')}
-                </time>
-                <p>{post.data.description}</p>
+                
+                <div class="post-meta">
+                    <time datetime={post.data.pubDate.toISOString()}>
+                        📅 {post.data.pubDate.toLocaleDateString('pt-BR')}
+                    </time>
+                    </div>
+
+                <p class="post-desc">{post.data.description}</p>
+                
+                <a href={`/blog/${post.slug}/`} class="read-more">Ler artigo completo →</a>
             </li>
-		))}
-	</ul>
+        ))}
+    </ul>
+
 </BaseLayout>
 
 <style>
-    .post-list { list-style: none; padding: 0; }
-    .post-list li {
-        margin-bottom: 2rem;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 1rem;
+    /* Estilos locais específicos desta página */
+    
+    .feed-header {
+        margin: 2rem 0 1.5rem 0;
     }
-    .post-list h2 { margin-bottom: 0.5rem; }
-    time { color: #666; font-size: 0.9rem; }
+    .feed-header h2 {
+        font-size: 1.5rem;
+        color: var(--color-header-bg); /* Usa a variável do layout */
+        margin-bottom: 0.5rem;
+    }
+    .feed-header hr {
+        border: 0;
+        height: 2px;
+        background: #ddd;
+    }
+
+    .post-list { 
+        list-style: none; 
+        padding: 0; 
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    /* Estilo de Cartão para cada post */
+    .post-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 5px solid var(--color-accent-green); /* Detalhe verde na esquerda */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+    }
+
+    .post-card:hover {
+        transform: translateY(-3px); /* Leve subida ao passar o mouse */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .post-link {
+        text-decoration: none;
+    }
+    
+    .post-card h3 { 
+        margin-bottom: 0.5rem; 
+        font-size: 1.4rem;
+        color: var(--color-header-bg);
+    }
+    
+    .post-link:hover h3 {
+        color: var(--color-accent-green);
+        text-decoration: underline;
+    }
+
+    .post-meta {
+        font-size: 0.85rem;
+        color: #777;
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 10px;
+    }
+
+    .post-desc {
+        color: #444;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .read-more {
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: var(--color-accent-green);
+    }
+    .read-more:hover {
+        color: var(--color-header-bg);
+    }
 </style>
