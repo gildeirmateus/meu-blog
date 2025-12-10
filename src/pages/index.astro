@@ -30,7 +30,7 @@ const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
     </div>
 
     <ul class="post-list">
-        {sortedPosts.map((post) => (
+        {sortedPosts.slice(0, 3).map((post) => (
             <li class="post-card">
                 <a href={`/blog/${post.slug}/`} class="post-link">
                     <h3>{post.data.title}</h3>
@@ -40,7 +40,7 @@ const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
                     <time datetime={post.data.pubDate.toISOString()}>
                         📅 {post.data.pubDate.toLocaleDateString('pt-BR')}
                     </time>
-                    </div>
+                </div>
 
                 <p class="post-desc">{post.data.description}</p>
                 
@@ -48,6 +48,10 @@ const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
             </li>
         ))}
     </ul>
+
+    <div class="view-all-container">
+        <a href="/blog" class="btn-view-all">Ver todos os artigos</a>
+    </div>
 
 </BaseLayout>
 
@@ -80,15 +84,15 @@ const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
     .post-card {
         background: white;
         padding: 1.5rem;
-        border-radius: 8px;
+        border-radius: 12px;
         border-left: 5px solid var(--color-accent-green); /* Detalhe verde na esquerda */
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        transition: transform 0.2s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .post-card:hover {
-        transform: translateY(-3px); /* Leve subida ao passar o mouse */
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: translateY(-5px); /* Leve subida ao passar o mouse */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
     .post-link {
@@ -103,7 +107,7 @@ const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
     
     .post-link:hover h3 {
         color: var(--color-accent-green);
-        text-decoration: underline;
+        text-decoration: none;
     }
 
     .post-meta {
@@ -127,5 +131,29 @@ const pageTitle = "Sementaria Ambiental | Consultoria Especializada";
     }
     .read-more:hover {
         color: var(--color-header-bg);
+        text-decoration: underline;
+    }
+
+    .view-all-container {
+        margin-top: 3rem;
+        text-align: center;
+    }
+
+    .btn-view-all {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        background-color: var(--color-header-bg);
+        color: white;
+        font-weight: bold;
+        border-radius: 30px;
+        transition: background 0.3s, transform 0.3s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-view-all:hover {
+        background-color: var(--color-accent-green);
+        transform: scale(1.05);
+        text-decoration: none;
+        color: white;
     }
 </style>

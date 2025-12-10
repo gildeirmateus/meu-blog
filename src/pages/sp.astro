@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = "São Paulo | Sementaria Ambiental";
+---
+<BaseLayout title={pageTitle}>
+  <section class="page-content">
+    <h1>Legislação e Foco: São Paulo</h1>
+    <p>
+      O estado de São Paulo demanda rigor no cumprimento das normas da CETESB e da Secretaria de Meio Ambiente.
+      Disponibilizamos informações essenciais para empreendedores e proprietários rurais paulistas.
+    </p>
+    <ul>
+      <li>Licenciamento Ambiental (CETESB)</li>
+      <li>Reserva Legal e APP em SP</li>
+      <li>Compensação Ambiental</li>
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  h1 { margin-bottom: 1.5rem; color: var(--color-header-bg); }
+  p { margin-bottom: 1rem; line-height: 1.8; color: #444; }
+  ul { margin-left: 1.5rem; margin-top: 1rem; }
+  li { margin-bottom: 0.5rem; color: #555; }
+</style>
