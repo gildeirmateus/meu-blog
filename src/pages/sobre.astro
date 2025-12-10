@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = "Sobre | Sementaria Ambiental";
+---
+
+<BaseLayout title={pageTitle}>
+    <section>
+        <h1>Sobre a Sementaria Ambiental</h1>
+        <p>
+            A Sementaria Ambiental é uma iniciativa dedicada à consultoria e inteligência ambiental, com foco nos estados de Minas Gerais e São Paulo. Nossa missão é desmistificar a legislação ambiental e promover práticas sustentáveis.
+        </p>
+        <p>
+            Oferecemos suporte a gestores, empresas e produtores rurais, auxiliando na tomada de decisões estratégicas e na conformidade com as normas ambientais vigentes. Acreditamos que a informação clara e acessível é a chave para um desenvolvimento que respeita o meio ambiente.
+        </p>
+        <h2>Nossos Valores</h2>
+        <ul>
+            <li><strong>Sustentabilidade:</strong> Buscamos soluções que equilibrem o desenvolvimento econômico com a preservação ambiental.</li>
+            <li><strong>Transparência:</strong> Atuamos com clareza em todas as nossas análises e recomendações.</li>
+            <li><strong>Conhecimento:</strong> Baseamos nosso trabalho em estudos técnicos aprofundados e atualização constante sobre a legislação.</li>
+            <li><strong>Inovação:</strong> Procuramos novas abordagens e tecnologias para os desafios ambientais.</li>
+        </ul>
+        <h2>Nossa Atuação</h2>
+        <p>
+            Especializamo-nos em licenciamento ambiental, recuperação de áreas degradadas, gestão de recursos hídricos e florestais, e consultoria para adequação à legislação. Publicamos regularmente artigos e estudos de caso para compartilhar conhecimento e fomentar a discussão sobre temas ambientais relevantes.
+        </p>
+        <p>
+            Junte-se a nós na construção de um futuro mais verde e sustentável!
+        </p>
+    </section>
+</BaseLayout>
+
+<style>
+    section {
+        padding: 2rem;
+    }
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--color-header-bg);
+    }
+    h2 {
+        font-size: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: var(--color-header-bg);
+    }
+    p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+        color: #333;
+    }
+    ul {
+        list-style: inside;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+    }
+    li {
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+    li strong {
+        color: var(--color-accent-green);
+    }
+</style>
