@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = "Sobre | Sementaria Ambiental";
+---
+<BaseLayout title={pageTitle}>
+  <section class="page-content">
+    <h1>Sobre a Sementaria Ambiental</h1>
+    <p>
+      Somos uma consultoria dedicada a trazer clareza e eficiência para a gestão ambiental em Minas Gerais e São Paulo. 
+      Nossa missão é conectar produtores e empresas às melhores práticas sustentáveis, garantindo conformidade legal e respeito ao meio ambiente.
+    </p>
+    <p>
+      Com uma equipe especializada, oferecemos suporte técnico em licenciamento, adequação ambiental e projetos de recuperação de flora.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  h1 { margin-bottom: 1.5rem; color: var(--color-header-bg); }
+  p { margin-bottom: 1rem; line-height: 1.8; color: #444; }
+</style>
