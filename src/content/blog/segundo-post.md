@@ -2,6 +2,7 @@
 title: 'Por que performance importa na Web?'
 pubDate: 2023-11-05
 description: 'Entenda como sites rápidos melhoram a experiência do usuário e ajudam no ranking do Google.'
+state: 'SP'
 author: 'Seu Nome'
 tags: ["performance", "seo", "dicas"]
 image:

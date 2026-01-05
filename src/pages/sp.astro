@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts.filter(p => p.data.state === 'SP').sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const pageTitle = "Legislação e Artigos - São Paulo";
+---
+
+<BaseLayout title={pageTitle}>
+    <h1>🏙️ São Paulo</h1>
+    <p class="intro">Conteúdos específicos para legislação e meio ambiente em SP.</p>
+    
+    {posts.length > 0 ? (
+        <ul class="post-list">
+            {posts.map((post) => (
+                <li class="post-card">
+                    <a href={`/blog/${post.slug}/`} class="post-link">
+                        <h3>{post.data.title}</h3>
+                    </a>
+                    <div class="post-meta">
+                        <time datetime={post.data.pubDate.toISOString()}>
+                            📅 {post.data.pubDate.toLocaleDateString('pt-BR')}
+                        </time>
+                    </div>
+                    <p>{post.data.description}</p>
+                </li>
+            ))}
+        </ul>
+    ) : (
+        <p>Nenhum artigo encontrado para SP no momento.</p>
+    )}
+</BaseLayout>
+
+<style>
+    .intro { margin-bottom: 2rem; font-size: 1.1rem; }
+    .post-list { 
+        list-style: none; 
+        padding: 0; 
+        display: grid;
+        gap: 2rem;
+    }
+    .post-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 5px solid var(--color-accent-green);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+    }
+    .post-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .post-link { text-decoration: none; }
+    .post-card h3 { color: var(--color-header-bg); margin-bottom: 0.5rem; }
+    .post-meta { font-size: 0.85rem; color: #777; margin-bottom: 1rem; }
+</style>

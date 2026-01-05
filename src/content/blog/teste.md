@@ -2,6 +2,7 @@
 title: Teste
 pubDate: 2025-12-03
 description: Teste blog
+state: 'MG'
 coverImage: /images/posts/teste/coverImage.png
 ---
 teste blog

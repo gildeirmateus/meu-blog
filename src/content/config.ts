@@ -8,6 +8,7 @@ const blogCollection = defineCollection({
 		description: z.string(),
 		author: z.string().optional(),
 		coverImage: z.string().optional(), // String simples para o caminho da imagem
+		state: z.enum(['MG', 'SP', 'Geral']).optional(),
 	}),
 });
 

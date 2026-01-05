@@ -1,10 +1,17 @@
 ---
 // src/layouts/BaseLayout.astro
+import { getCollection } from 'astro:content';
+
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+
+// Fetch posts for sidebar hover logic
+const allPosts = await getCollection('blog');
+const mgPosts = allPosts.filter(p => p.data.state === 'MG').sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 5);
+const spPosts = allPosts.filter(p => p.data.state === 'SP').sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 5);
 ---
 
 <!doctype html>
@@ -27,7 +34,7 @@ const { title } = Astro.props;
         <ul class="top-nav">
           <li><a href="/">Início</a></li>
           <li><a href="/sobre">Sobre</a></li>
-          <li><a href="/admin" class="admin-icon">🍃</a></li> 
+          <li><a href="/admin" class="admin-icon" aria-label="Painel Admin">🍃</a></li> 
         </ul>
       </nav>
     </header>
@@ -35,13 +42,39 @@ const { title } = Astro.props;
     <div class="main-wrapper">
         <aside class="sidebar">
             <h3>Atuação Regional</h3>
-            <p style="font-size: 0.9rem; margin-bottom: 1rem; color: #555;">Selecione seu estado para ver legislações e artigos específicos:</p>
+            <p style="font-size: 0.9rem; margin-bottom: 1rem; color: #3E2723;">Selecione seu estado:</p>
             <nav class="state-nav">
                 <ul>
-                    <li><a href="/mg">🌲 Minas Gerais</a></li>
-                    <li><a href="/sp">🏙️ São Paulo</a></li>
+                    <li class="has-submenu">
+                        <a href="/mg" class="state-link">🌲 Minas Gerais</a>
+                        <div class="submenu">
+                            <h4>Últimos em MG</h4>
+                            {mgPosts.length > 0 ? (
+                                <ul>
+                                    {mgPosts.map(p => (
+                                        <li><a href={`/blog/${p.slug}/`}>{p.data.title}</a></li>
+                                    ))}
+                                </ul>
+                            ) : <p class="empty-msg">Nenhum artigo recente.</p>}
+                             <a href="/mg" class="view-all">Ver todos →</a>
+                        </div>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="/sp" class="state-link">🏙️ São Paulo</a>
+                        <div class="submenu">
+                             <h4>Últimos em SP</h4>
+                             {spPosts.length > 0 ? (
+                                <ul>
+                                    {spPosts.map(p => (
+                                        <li><a href={`/blog/${p.slug}/`}>{p.data.title}</a></li>
+                                    ))}
+                                </ul>
+                            ) : <p class="empty-msg">Nenhum artigo recente.</p>}
+                            <a href="/sp" class="view-all">Ver todos →</a>
+                        </div>
+                    </li>
                     <li class="separator"></li>
-                    <li><a href="/blog">📰 Artigos Recentes</a></li>
+                    <li><a href="/blog">📰 Todos os Artigos</a></li>
                 </ul>
             </nav>
         </aside>
@@ -53,7 +86,7 @@ const { title } = Astro.props;
 
     <footer class="site-footer">
       <div class="footer-content">
-        <p>© 2025 Sementaria Ambiental. Consultoria especializada.</p>
+        <p>© 2026 Sementaria Ambiental. Consultoria especializada.</p>
       </div>
     </footer>
 
@@ -79,15 +112,20 @@ const { title } = Astro.props;
 </html>
 
 <style is:global>
-  /* --- Variáveis de Cor --- */
+  /* --- Variáveis de Cor (Atualizadas) --- */
   :root {
-    --color-bg-main: #8D7E71;
-    --color-text-dark: #3E2723;
-    --color-text-light: #EFEBE9;
-    --color-header-bg: #4E342E;
-    --color-content-bg: #FAF8F7;
-    --color-sidebar-bg: #D7CCC8;
-    --color-accent-green: #33691E;
+    /* Paleta inspirada na natureza, mais escura e terrosa */
+    --color-bg-main: #5D4037; /* Marrom escuro/Terra */
+    --color-text-dark: #2E2E2E;
+    --color-text-light: #F5F5F5;
+    
+    --color-header-bg: #2E3B29; /* Verde Musgo Escuro Profundo */
+    --color-content-bg: #FAF9F8; /* Quase branco, levemente quente */
+    --color-sidebar-bg: #D7CCC8; /* Bege/Cinza quente */
+    
+    --color-accent-green: #558B2F; /* Verde folha vivo */
+    --color-accent-hover: #33691E;
+    
     --font-heading: 'Merriweather', serif;
     --font-body: 'Open Sans', sans-serif;
   }
@@ -95,19 +133,22 @@ const { title } = Astro.props;
   /* Reset */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
+  html {
+      scroll-behavior: smooth;
+  }
+
   body {
     font-family: var(--font-body);
     line-height: 1.7;
     color: var(--color-text-dark);
     
-    /* --- CONFIGURAÇÃO DO FUNDO CORRIGIDA --- */
     background-color: var(--color-bg-main);
-    /* Lembre-se de colocar a imagem na pasta 'public' */
     background-image: url('/textura-folha.jpg'); 
-    background-repeat: no-repeat; /* Não repete lado a lado */
-    background-size: cover;       /* Estica para cobrir a tela toda */
-    background-attachment: fixed; /* O fundo fica parado ao rolar */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
     background-position: center;
+    background-blend-mode: overlay; /* Mistura a cor com a imagem para escurecer */
     
     min-height: 100vh;
     display: flex;
@@ -115,58 +156,65 @@ const { title } = Astro.props;
   }
 
   a { color: var(--color-accent-green); text-decoration: none; transition: color 0.2s; }
-  a:hover { color: var(--color-header-bg); text-decoration: underline; }
+  a:hover { color: var(--color-accent-hover); text-decoration: underline; }
   img { max-width: 100%; height: auto; display: block; }
-  h1, h2, h3 { font-family: var(--font-heading); color: var(--color-header-bg); }
+  h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--color-header-bg); }
 
   /* Cabeçalho */
   .site-header {
     background: var(--color-header-bg);
     color: var(--color-text-light);
-    padding: 0.8rem 0;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    position: sticky; /* Menu fica fixo no topo no celular também */
+    padding: 1rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
   }
 
   .site-header nav {
-    /* Aumentei para 1400px para ir mais para a esquerda */
-    max-width: 1400px; 
+    width: 95%; /* Ocupa quase toda a largura */
+    max-width: 1800px;
     margin: auto;
     display: flex;
     justify-content: space-between;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     align-items: center;
   }
 
   /* Logo */
-  .logo-link { display: flex; align-items: center; gap: 12px; text-decoration: none !important; }
+  .logo-link { display: flex; align-items: center; gap: 15px; text-decoration: none !important; }
   .logo-img { 
-      width: 45px; height: auto; 
-      filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); /* Destaque sutil */
+      width: 50px; height: auto; 
+      filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
   }
   .logo-text {
       font-family: var(--font-heading);
       font-weight: bold;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: var(--color-text-light);
       display: none; 
+      letter-spacing: 0.5px;
   }
   @media (min-width: 480px) { .logo-text { display: block; } }
 
-  .site-header ul.top-nav { display: flex; gap: 1.5rem; list-style: none; }
-  .site-header ul.top-nav a { color: var(--color-text-light); font-weight: 600; font-size: 0.95rem; }
-  .admin-icon { font-size: 1.2rem; }
+  .site-header ul.top-nav { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .site-header ul.top-nav a { 
+      color: var(--color-text-light); 
+      font-weight: 600; 
+      font-size: 1rem; 
+      opacity: 0.9;
+      transition: opacity 0.2s;
+  }
+  .site-header ul.top-nav a:hover { opacity: 1; text-decoration: none; border-bottom: 2px solid var(--color-accent-green); }
+  .admin-icon { font-size: 1.4rem; }
 
   /* Layout Wrapper */
   .main-wrapper {
       flex: 1;
-      width: 100%;
-      /* Aumentei aqui para 1400px para expandir para os lados */
-      max-width: 1400px; 
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      width: 95%; /* Mais largo para empurrar a sidebar para esquerda */
+      max-width: 1800px; 
+      margin: 2.5rem auto;
+      padding: 0 1rem;
       display: flex;
       flex-direction: column;
       gap: 2rem;
@@ -176,70 +224,171 @@ const { title } = Astro.props;
   .sidebar {
       background: var(--color-sidebar-bg);
       padding: 1.5rem;
-      border-radius: 8px;
-      border-left: 5px solid var(--color-accent-green);
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      border-left: 6px solid var(--color-accent-green);
+      box-shadow: 4px 4px 15px rgba(0,0,0,0.2);
+      position: relative; /* Necessário para o z-index do submenu */
   }
-  .sidebar h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+  .sidebar h3 { margin-bottom: 1rem; font-size: 1.3rem; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem; }
+  
   .state-nav ul { list-style: none; }
-  .state-nav li { margin-bottom: 0.5rem; }
-  .state-nav .separator { margin: 1rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
-  .state-nav a {
+  .state-nav > ul > li { margin-bottom: 0.8rem; position: relative; } /* Posição relativa para o submenu absoluto */
+  
+  .state-nav .separator { margin: 1.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+  
+  .state-link, .state-nav a:not(.view-all) {
       display: block;
-      padding: 0.6rem 1rem;
-      background: rgba(255,255,255,0.6);
-      border-radius: 4px;
+      padding: 0.8rem 1.2rem;
+      background: rgba(255,255,255,0.7);
+      border-radius: 6px;
       color: var(--color-header-bg);
       font-weight: 700;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
-  .state-nav a:hover {
+  
+  .state-link:hover, .state-nav a:not(.view-all):hover {
       background: var(--color-accent-green);
       color: white;
       text-decoration: none;
-      transform: translateX(5px); /* Efeito de movimento ao passar o mouse */
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  /* --- Submenu (Hover) --- */
+  .submenu {
+      display: none; /* Escondido por padrão */
+      position: absolute;
+      left: 100%; /* À direita do item pai */
+      top: 0;
+      width: 320px;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0 12px 12px 12px;
+      box-shadow: 5px 5px 20px rgba(0,0,0,0.25);
+      z-index: 50;
+      margin-left: 10px;
+      border: 1px solid #eee;
+  }
+
+  /* Triângulo/Seta apontando para a esquerda */
+  .submenu::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: -10px;
+      border-width: 10px 10px 10px 0;
+      border-style: solid;
+      border-color: transparent white transparent transparent;
+  }
+
+  /* Mostrar submenu ao passar o mouse no LI */
+  .has-submenu:hover .submenu {
+      display: block;
+      animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+  }
+
+  .submenu h4 {
+      font-size: 1rem;
+      color: #777;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+  }
+
+  .submenu ul { list-style: none; margin-bottom: 1rem; }
+  .submenu li { margin-bottom: 0.8rem; border-bottom: 1px dotted #eee; padding-bottom: 0.5rem; }
+  .submenu li:last-child { border-bottom: none; }
+  
+  .submenu a {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-header-bg);
+      display: inline-block; /* Reset do block do menu pai */
+      padding: 0;
+      background: none;
+      box-shadow: none;
+  }
+  .submenu a:hover {
+      color: var(--color-accent-green);
+      background: none;
+      transform: none;
+      box-shadow: none;
+  }
+
+  .empty-msg { font-size: 0.9rem; color: #999; font-style: italic; margin-bottom: 1rem; }
+  
+  .view-all {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: var(--color-accent-green);
+      font-weight: bold;
+      margin-top: 0.5rem;
   }
 
   /* Área de Conteúdo */
   .content-area {
     background: var(--color-content-bg);
     padding: 3rem;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-top: 5px solid var(--color-header-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-top: 6px solid var(--color-header-bg);
   }
 
-  /* CLASSE NOVA PARA A INTRO (Use isso no seu index.astro) */
   .blog-intro {
     background-color: #EFEBE9;
-    padding: 2rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    border-left: 4px solid var(--color-header-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    margin-bottom: 3rem;
+    border-left: 6px solid var(--color-header-bg);
   }
-  .blog-intro h1 { font-size: 2rem; margin-bottom: 1rem; }
-  .blog-intro p { font-size: 1.1rem; margin-bottom: 1rem; }
+  .blog-intro h1 { font-size: 2.2rem; margin-bottom: 1.2rem; }
+  .blog-intro p { font-size: 1.15rem; margin-bottom: 1.2rem; color: #555; }
 
   /* Rodapé */
   .site-footer {
     background: var(--color-header-bg);
-    color: rgba(255,255,255,0.8);
-    padding: 2rem 0;
+    color: rgba(255,255,255,0.7);
+    padding: 3rem 0;
     text-align: center;
     margin-top: auto;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    border-top: 4px solid var(--color-accent-green);
   }
 
   /* Responsividade */
-  @media (min-width: 900px) { /* Mudei para 900px para garantir espaço */
+  @media (min-width: 1024px) {
       .main-wrapper {
           display: grid;
-          /* Sidebar fixa em 280px, o resto é conteúdo */
-          grid-template-columns: 280px 1fr;
-          gap: 3rem;
+          /* Sidebar fixa em 300px, o resto é conteúdo */
+          grid-template-columns: 300px 1fr;
+          gap: 4rem;
           align-items: start;
       }
-      .sidebar { position: sticky; top: 5rem; }
-      .logo-img { width: 55px; }
+      .sidebar { position: sticky; top: 6rem; }
+      .logo-img { width: 60px; }
+  }
+  
+  /* Ajuste para mobile onde hover não funciona bem */
+  @media (max-width: 1023px) {
+      .submenu {
+          position: static;
+          width: 100%;
+          box-shadow: none;
+          border: none;
+          background: rgba(255,255,255,0.5);
+          margin: 0;
+          padding: 0.5rem 0 0.5rem 1rem;
+          display: none; /* Mantém escondido, precisaria de JS para toggle click */
+      }
+      .submenu::before { display: none; }
+      /* No mobile, talvez mostrar sempre ou usar click? Por enquanto deixamos simples */
   }
 </style>
