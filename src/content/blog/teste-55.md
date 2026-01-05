@@ -2,6 +2,7 @@
 title: Teste 55
 pubDate: 2025-12-05
 description: Teste 2025
+state: 'MG'
 author: Nayara
 coverImage: /images/uploads/screenshot_10.png
 ---
